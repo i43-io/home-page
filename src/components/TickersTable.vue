@@ -13,10 +13,16 @@
       <template #default="scope"><i :class="{ red: scope.row.last > data[0].last, green: scope.row.last < data[0].last }">{{scope.row.last}}</i></template>
     </el-table-column> -->
     <el-table-column label="ASK">
-      <template #default="scope"><i :class="{ red: scope.row.askPx < data[0].bidPx, green: scope.row.askPx > data[0].bidPx }">{{scope.row.askPx}}</i></template>
+      <template #default="scope">
+        <div :class="{ red: scope.row.askPx < data[0].bidPx, green: scope.row.askPx > data[0].bidPx }">{{scope.row.askPx}}</div>
+        <div v-if="positions[scope.row.instId] && positions[scope.row.instId].posSide === 'long'">{{positions[scope.row.instId].availPos}}</div>
+      </template>
     </el-table-column>
     <el-table-column label="BID">
-      <template #default="scope"><i :class="{ red: scope.row.bidPx > data[0].askPx, green: scope.row.bidPx < data[0].askPx }">{{scope.row.bidPx}}</i></template>
+      <template #default="scope">
+        <div :class="{ red: scope.row.bidPx > data[0].askPx, green: scope.row.bidPx < data[0].askPx }">{{scope.row.bidPx}}</div>
+        <div v-if="positions[scope.row.instId] && positions[scope.row.instId].posSide === 'short'">{{positions[scope.row.instId].availPos}}</div>
+      </template>
     </el-table-column>
     <!-- <el-table-column label="DIFF">
       <template #default="scope"><i :class="{ red: scope.row.diff > 0, green: scope.row.diff < 0 }">{{scope.row.diff && scope.row.diff.toFixed(3)}}</i></template>
@@ -28,11 +34,15 @@
 </template>
 
 <script lang="ts">
+import { mapState } from 'vuex'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
     data: Object
+  },
+  computed: {
+    ...mapState('okex', ['positions'])
   }
 })
 </script>
