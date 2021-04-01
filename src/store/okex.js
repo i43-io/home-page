@@ -1,12 +1,26 @@
 /* eslint-disable */
+import _ from 'co-lodash'
 import { v5 } from 'okex-api'
 
 const httpApi = new v5.HttpApi({ baseURL: 'https://ph8xwdmyl4.execute-api.us-east-1.amazonaws.com/prod' })
+let wsApi = null
 
 function parseTicker(t) {
   const [coin,,dd] = t.instId.split('-')
   Object.assign(t, { coin, dd })
   return t
+}
+
+function setDiff(t, swap) {
+  const diffSf = t.bidPx - swap.askPx
+  const diffFs = swap.bidPx - t.askPx
+  if (diffSf > diffFs) {
+    t.diff = diffSf
+    t.diffRate = diffSf / swap.askPx
+  } else {
+    t.diff = diffFs
+    t.diffRate = diffFs / t.askPx
+  }
 }
 
 function groupTickers(middle, futuresTickers, swapTickers) {
@@ -28,17 +42,7 @@ function groupTickers(middle, futuresTickers, swapTickers) {
     ret[coin].sort((a, b) => a.dd === 'SWAP' ? -1 : b.dd === 'SWAP' ? 1 : a.dd < b.dd ? -1 : a.dd > b.dd ? 1 : 0)
     if (ret[coin][0].dd === 'SWAP') {
       const swap = ret[coin][0]
-      ret[coin].slice(1).forEach(t => {
-        const diffSf = t.bidPx - swap.askPx
-        const diffFs = swap.bidPx - t.askPx
-        if (diffSf > diffFs) {
-          t.diff = diffSf
-          t.diffRate = diffSf / swap.askPx
-        } else {
-          t.diff = diffFs
-          t.diffRate = diffFs / t.askPx
-        }
-      })
+      ret[coin].slice(1).forEach(t => setDiff(t, swap))
     }
   }
 
@@ -55,6 +59,19 @@ export default {
     setTickers(state, { usdTickers, usdtTickers }) {
       state.usdTickers = usdTickers
       state.usdtTickers = usdtTickers
+    },
+    updateTicker(state, ticker) {
+      const tickers = ticker.instId.indexOf('-USD-') > 0 ? state.usdTickers : state.usdtTickers
+      const group = tickers[ticker.coin]
+      const swap = group[0]
+
+      const oldTicker = group.find(t => t.instId === ticker.instId)
+      Object.assign(oldTicker, ticker)
+      if (ticker.dd === 'SWAP') {
+        group.slice(1).forEach(t => setDiff(t, swap))  
+      } else {
+        setDiff(oldTicker, swap)
+      }
     }
   },
   actions: {
@@ -66,6 +83,11 @@ export default {
       const usdtTickers = groupTickers('-USDT-', futuresTickers, swapTickers)
 
       commit('setTickers', { usdTickers, usdtTickers })
+
+      wsApi = new v5.WsApi()
+      wsApi.on('tickers', ([ticker]) => commit('updateTicker', parseTicker(ticker)))
+      await wsApi.subscribePublic(_.flatMap(usdTickers, g => g.map(({ instId }) => ({ channel: 'tickers', instId }))))
+      await wsApi.subscribePublic(_.flatMap(usdtTickers, g => g.map(({ instId }) => ({ channel: 'tickers', instId }))))
     }
   }
 }

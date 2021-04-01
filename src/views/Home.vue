@@ -56,7 +56,7 @@ export default defineComponent({
     return {
       type: 0,
       typeItems: ['USD', 'USDT'],
-      sortBy: 0,
+      sortBy: 1,
       sortByItems: [
         { idx: 1, text: '当周' },
         { idx: 2, text: '次周' }
