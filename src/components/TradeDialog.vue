@@ -20,8 +20,8 @@
       </el-table>
       <br />
       <el-row :gutter="16">
-        <el-col :span="12"><el-input type="number" placeholder="开仓量" /></el-col>
-        <el-col :span="12"><el-button>开仓</el-button></el-col>
+        <el-col :span="12"><el-input type="number" v-model="openAmt" placeholder="开仓量" /></el-col>
+        <el-col :span="12"><el-button @click="open(openAmt)" :disabled="opening">开仓</el-button></el-col>
       </el-row>
       <br/>
     </div>
@@ -44,8 +44,8 @@
       </el-table>
       <br />
       <el-row :gutter="16">
-        <el-col :span="12"><el-input type="number" placeholder="平仓量" /></el-col>
-        <el-col :span="12"><el-button>平仓</el-button></el-col>
+        <el-col :span="12"><el-input type="number" v-model="closeAmt" placeholder="平仓量" /></el-col>
+        <el-col :span="12"><el-button @click="close(pair[0], pair[1], closeAmt)" :disabled="closing">平仓</el-button></el-col>
       </el-row>
       <br/>
     </div>
@@ -53,18 +53,43 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapGetters, useStore } from 'vuex'
-import { defineComponent } from 'vue'
+import { mapState, mapGetters, mapActions, useStore } from 'vuex'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   computed: {
     ...mapState('okex', ['positisions', 'accounts']),
     ...mapGetters('okex', ['currentTickers', 'currentPositionPairs'])
   },
+  methods: {
+    ...mapActions('okex', ['batchOpen', 'batchClose']),
+    async open(amount) {
+      this.opening = true
+      try {
+        await this.batchOpen({ long: this.currentTickers[0].instId, short: this.currentTickers[1].instId, amount })
+      } catch (e) {
+        window.alert(e)
+      }
+      this.opening = false
+    },
+    async close(short, long, amount) {
+      this.closing = true
+      try {
+        await this.batchClose({ short, long, amount })
+      } catch (e) {
+        window.alert(e)
+      }
+      this.closing = false
+    }
+  },
   setup() {
     const store = useStore()
 
     return {
+      openAmt: ref(0),
+      opening: ref(false),
+      closeAmt: ref(0),
+      closing: ref(false),
       handleClose: window.console.log,
       currentInstId: store.state.currentInstId
     }

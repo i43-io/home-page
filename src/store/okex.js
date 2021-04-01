@@ -140,19 +140,42 @@ export default {
       await wsApi.subscribePublic(_.flatMap(usdtTickers, g => g.map(({ instId }) => ({ channel: 'tickers', instId }))))
     },
 
-    async updateApiOpt({ commit, state }, { apiKey, apiSecret, passphrase }) {
+    async updateAccount({ commit, state }) {
+      const coins = Object.keys(state.usdTickers).join(',') + ',USDT'
+
+      commit('setAccounts', await httpApi.getAccounts(coins))
+      commit('setPositions', [
+        ...await httpApi.getPositions('FUTURES'),
+        ...await httpApi.getPositions('SWAP')
+      ])
+    },
+
+    async updateApiOpt({ dispatch }, { apiKey, apiSecret, passphrase }) {
       if (apiKey && apiSecret && passphrase) {
         window.localStorage.setItem(APIOPT_KEY, JSON.stringify({ apiKey, apiSecret, passphrase }))
         httpApi.update(apiKey, apiSecret, passphrase)
-
-        const coins = Object.keys(state.usdTickers).join(',') + ',USDT'
-
-        commit('setAccounts', await httpApi.getAccounts(coins))
-        commit('setPositions', [
-          ...await httpApi.getPositions('FUTURES'),
-          ...await httpApi.getPositions('SWAP')
-        ])
+        await dispatch('updateAccount')
       }
+    },
+
+    async batchOpen({ dispatch }, { long, short, amount }) {
+      await httpApi.batchOrder([
+        httpApi.toOrder(long, 'buy', 'long', 'market', amount),
+        httpApi.toOrder(short, 'sell', 'short', 'market', amount)
+      ])
+
+      await _.sleep(1000)
+      await dispatch('updateAccount')
+    },
+
+    async batchClose({ dispatch }, { long, short, amount }) {
+      await httpApi.batchOrder([
+        httpApi.toOrder(short.instId, 'buy', 'short', 'market', amount),
+        httpApi.toOrder(long.instId, 'sell', 'long', 'market', amount)
+      ])
+
+      await _.sleep(1000)
+      await dispatch('updateAccount')
     }
   }
 }
