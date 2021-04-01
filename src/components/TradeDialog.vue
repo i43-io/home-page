@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     title="交易"
-    v-model="currentInstId"
+    v-model="show"
     :before-close="handleClose">
     <div v-if="currentTickers.length > 0 && currentTickers[1].bidPx - currentTickers[0].askPx > 0">
       <el-table :data="currentTickers">
@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { mapState, mapGetters, mapActions, useStore } from 'vuex'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
   computed: {
@@ -85,13 +85,16 @@ export default defineComponent({
   setup() {
     const store = useStore()
 
+    const show = ref(!!store.state.currentInstId)
+    watch(() => store.state.currentInstId, instId => show.value = !!instId)
+
     return {
       openAmt: ref(0),
       opening: ref(false),
       closeAmt: ref(0),
       closing: ref(false),
-      handleClose: window.console.log,
-      currentInstId: store.state.currentInstId
+      // handleClose: window.console.log,
+      show
     }
   }
 })

@@ -4,6 +4,7 @@
     class="ticker-table"
     :data="data"
     :row-class-name="({ rowIndex }) => ({ futures: rowIndex > 0 })"
+    @row-click="row => setCurrentInstId(row.instId)"
   >
     <el-table-column
       prop="dd"
@@ -34,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -43,6 +44,9 @@ export default defineComponent({
   },
   computed: {
     ...mapState('okex', ['positions'])
+  },
+  methods: {
+    ...mapMutations(['setCurrentInstId'])
   }
 })
 </script>

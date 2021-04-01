@@ -4,9 +4,12 @@ import okex from './okex'
 
 export default createStore({
   state: {
-    currentInstId: 'ETH-USD-210625'
+    currentInstId: ''
   },
   mutations: {
+    setCurrentInstId(state, instId) {
+      state.currentInstId = instId
+    }
   },
   actions: {
   },
