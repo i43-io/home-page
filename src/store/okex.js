@@ -70,6 +70,22 @@ export default {
         .sort((a, b) => a.last - b.last)
 
       return ret || []
+    },
+    currentPositionPairs({ positions }, { currentTickers }) {
+      if (currentTickers.length !== 2) return []
+
+      const sides = ['short:', 'long:'];
+      return [[0, 1], [1, 0]]
+        .map(pair => {
+          pair = pair.map((tidx, idx) => {
+            const tick = currentTickers[tidx]
+            const pos = positions[sides[idx] + tick.instId]
+            return pos && { ...tick, ...pos }
+          })
+
+          return pair.every(v => v) && pair
+        })
+        .filter(v => v)
     }
   },
   mutations: {

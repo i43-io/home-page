@@ -3,7 +3,6 @@
     title="交易"
     v-model="currentInstId"
     :before-close="handleClose">
-
     <div v-if="currentTickers.length > 0 && currentTickers[1].bidPx - currentTickers[0].askPx > 0">
       <el-table :data="currentTickers">
         <el-table-column label="#" prop="dd" />
@@ -26,6 +25,30 @@
       </el-row>
       <br/>
     </div>
+
+    <div v-for="pair in currentPositionPairs" :key="pair[0].instId + pair[1].instId">
+      <el-table :data="pair">
+        <el-table-column label="#" prop="dd" />
+        <el-table-column label="价格">
+          <template #default="scope">
+            <span v-if="scope.$index === 0">{{scope.row.askPx}}</span>
+            <span v-if="scope.$index === 1">{{scope.row.bidPx}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="开仓均价">
+          <template #default="scope">
+            <span>{{(scope.row.avgPx * 1).toFixed(3)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="持仓" prop="availPos" />
+      </el-table>
+      <br />
+      <el-row :gutter="16">
+        <el-col :span="12"><el-input type="number" placeholder="平仓量" /></el-col>
+        <el-col :span="12"><el-button>平仓</el-button></el-col>
+      </el-row>
+      <br/>
+    </div>
   </el-dialog>
 </template>
 
@@ -36,7 +59,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   computed: {
     ...mapState('okex', ['positisions', 'accounts']),
-    ...mapGetters('okex', ['currentTickers'])
+    ...mapGetters('okex', ['currentTickers', 'currentPositionPairs'])
   },
   setup() {
     const store = useStore()
