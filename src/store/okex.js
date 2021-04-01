@@ -61,6 +61,17 @@ export default {
     positions: {},
     api: apiOpt
   },
+  getters: {
+    currentTickers({ usdTickers, usdtTickers }, _, { currentInstId }) {
+      const [coin, middle] = currentInstId.split('-')
+      const group = (middle === 'USD' ? usdTickers : usdtTickers)[coin]
+      const ret = group && group
+        .filter(t => t.dd === 'SWAP' || t.instId === currentInstId)
+        .sort((a, b) => a.last - b.last)
+
+      return ret || []
+    }
+  },
   mutations: {
     setTickers(state, { usdTickers, usdtTickers }) {
       state.usdTickers = usdTickers
@@ -77,7 +88,10 @@ export default {
       state.accounts = accounts
     },
     setPositions(state, positions) {
-      positions.forEach(p => state.positions[p.instId] = p)
+      state.positions = positions.reduce((m, p) => {
+        m[p.posSide + ':' + p.instId] = p
+        return m
+      }, {})
     },
     updateTicker(state, ticker) {
       const tickers = ticker.instId.indexOf('-USD-') > 0 ? state.usdTickers : state.usdtTickers
@@ -118,8 +132,10 @@ export default {
         const coins = Object.keys(state.usdTickers).join(',') + ',USDT'
 
         commit('setAccounts', await httpApi.getAccounts(coins))
-        commit('setPositions', await httpApi.getPositions('FUTURES'))
-        commit('setPositions', await httpApi.getPositions('SWAP'))
+        commit('setPositions', [
+          ...await httpApi.getPositions('FUTURES'),
+          ...await httpApi.getPositions('SWAP')
+        ])
       }
     }
   }

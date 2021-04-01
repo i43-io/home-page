@@ -1,4 +1,5 @@
 <template>
+  <trade-dialog />
   <br />
   <el-row>
     <el-col :xs="6" :sm="3">
@@ -38,10 +39,11 @@ import { defineComponent } from 'vue';
 import { mapState } from 'vuex'
 
 import TickersTable from '@/components/TickersTable.vue'
+import TradeDialog from '@/components/TradeDialog.vue'
 
 export default defineComponent({
   name: 'Home',
-  components: { TickersTable },
+  components: { TickersTable, TradeDialog },
   computed: {
     ...mapState('okex', ['usdTickers', 'usdtTickers'])
   },
