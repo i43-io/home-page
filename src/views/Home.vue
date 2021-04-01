@@ -1,18 +1,16 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+  <tickers-table v-for="(tickers, coin) in usdtTickers" :key="coin" :data="tickers" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { mapState } from 'vuex'
+
+import TickersTable from '@/components/TickersTable.vue'
 
 export default defineComponent({
   name: 'Home',
-  components: {
-    HelloWorld,
-  },
+  components: { TickersTable },
+  computed: { ...mapState('okex', ['usdTickers', 'usdtTickers']) }
 });
 </script>
