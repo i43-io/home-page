@@ -1,5 +1,10 @@
 <template>
-  <tickers-table v-for="(tickers, coin) in usdtTickers" :key="coin" :data="tickers" />
+
+  <el-row :gutter="16">
+    <el-col :xs="24" :sm="12" :lg="8" v-for="(tickers, coin) in usdtTickers" :key="coin">
+      <tickers-table :data="tickers" />
+    </el-col>
+  </el-row>
 </template>
 
 <script lang="ts">
