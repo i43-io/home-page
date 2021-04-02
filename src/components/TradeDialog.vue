@@ -3,7 +3,7 @@
     title="交易"
     v-model="show"
     :before-close="handleClose">
-    <div v-if="currentTickers.length > 0 && currentTickers[1].bidPx - currentTickers[0].askPx > 0">
+    <div v-if="currentTickers.length === 2 && currentTickers[1].bidPx - currentTickers[0].askPx > 0">
       <el-table :data="currentTickers">
         <el-table-column label="#" prop="dd" />
         <el-table-column label="价格">
@@ -27,6 +27,8 @@
     </div>
 
     <div v-for="pair in currentPositionPairs" :key="pair[0].instId + pair[1].instId">
+      <span>预估强平价: {{(pair[0].liqPx * 1).toFixed(3)}} 保证金率: {{(pair[0].mgnRatio * 1).toFixed(1)}}%</span>
+      <br/>
       <el-table :data="pair">
         <el-table-column label="#" prop="dd" />
         <el-table-column label="价格">

@@ -143,7 +143,7 @@ export default {
     async updateAccount({ commit, state }) {
       const coins = Object.keys(state.usdTickers).join(',') + ',USDT'
 
-      commit('setAccounts', await httpApi.getAccounts(coins))
+      // commit('setAccounts', await httpApi.getAccounts(coins))
       commit('setPositions', [
         ...await httpApi.getPositions('FUTURES'),
         ...await httpApi.getPositions('SWAP')
