@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="交易"
+    :title="`交易 ${currentTickers && currentTickers[0] && currentTickers[0].instId.indexOf('USDT') > 0 ? 'USDT' : ''} ${currentTickers && currentTickers[0] && currentTickers[0].coin}`"
     v-model="show"
     :before-close="handleClose">
     <div v-if="currentTickers.length === 2 && currentTickers[1].bidPx - currentTickers[0].askPx > 0">
