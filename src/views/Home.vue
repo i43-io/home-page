@@ -51,7 +51,9 @@ export default defineComponent({
     getTickers() {
       const tickers = this.type === 0 ? this.usdTickers : this.usdtTickers
       const idx = this.sortByItems[this.sortBy].idx
-      return Object.values(tickers).sort((a: any, b: any) => b[idx].diffRate - a[idx].diffRate)
+      return Object.values(tickers)
+        .filter((v: any) => !this.filters[this.typeItems[this.type]] || this.filters[this.typeItems[this.type]].has(v[0].coin))
+        .sort((a: any, b: any) => b[idx].diffRate - a[idx].diffRate)
     }
   },
   data() {
@@ -59,6 +61,9 @@ export default defineComponent({
       type: 0,
       typeItems: ['USD', 'USDT'],
       sortBy: 1,
+      filters: {
+        USD: new Set(['BTC', 'ETH', 'EOS'])
+      },
       sortByItems: [
         { idx: 1, text: '当周' },
         { idx: 2, text: '次周' }
