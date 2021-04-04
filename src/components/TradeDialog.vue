@@ -31,8 +31,8 @@
       <br/>
       <el-table :data="pair" :show-summary="true" :summary-method="({ data }) => [
         '',
-        (data[0].askPx / data[1].bidPx * 100).toFixed(2) + '%',
-        (data[0].avgPx / data[1].avgPx * 100).toFixed(2) + '%',
+        (data[0].askPx / data[1].bidPx * 100 - 100).toFixed(2) + '%',
+        (data[0].avgPx / data[1].avgPx * 100 - 100).toFixed(2) + '%',
         '',
         (data[0].upl * 1 + data[1].upl * 1).toFixed(3)
       ]" >
