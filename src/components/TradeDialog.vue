@@ -29,7 +29,13 @@
     <div v-for="pair in currentPositionPairs" :key="pair[0].instId + pair[1].instId">
       <span>预估强平价: {{(pair[0].liqPx * 1).toFixed(3)}} 保证金率: {{(pair[0].mgnRatio * 1).toFixed(1)}}%</span>
       <br/>
-      <el-table :data="pair">
+      <el-table :data="pair" :show-summary="true" :summary-method="({ data }) => [
+        '',
+        (data[0].askPx / data[1].bidPx * 100).toFixed(2) + '%',
+        (data[0].avgPx / data[1].avgPx * 100).toFixed(2) + '%',
+        '',
+        (data[0].upl * 1 + data[1].upl * 1).toFixed(3)
+      ]" >
         <el-table-column label="#" prop="dd" />
         <el-table-column label="价格">
           <template #default="scope">
@@ -43,6 +49,12 @@
           </template>
         </el-table-column>
         <el-table-column label="持仓" prop="availPos" />
+        <el-table-column label="收益">
+          <template #default="scope">
+            <span :class="{ red: scope.row.upl > 0, green: scope.row.upl < 0 }">{{(scope.row.upl * 1).toFixed(3)}}</span>
+          </template>
+        </el-table-column>
+
       </el-table>
       <br />
       <el-row :gutter="16">
@@ -105,5 +117,9 @@ export default defineComponent({
 <style scoped>
 .red {
   color: red;
+}
+
+.green {
+  color: green;
 }
 </style>
