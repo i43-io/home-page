@@ -53,7 +53,7 @@ export default defineComponent({
       const idx = this.sortByItems[this.sortBy].idx
       return Object.values(tickers)
         .filter((v: any) => !this.filters[this.typeItems[this.type]] || this.filters[this.typeItems[this.type]].has(v[0].coin))
-        .sort((a: any, b: any) => b[idx].diffRate - a[idx].diffRate)
+        .sort((a: any, b: any) => idx < 3 ? b[idx].diffRate - a[idx].diffRate : a[idx].instId.charCodeAt(0) - b[idx].instId.charCodeAt(0))
     }
   },
   data() {
@@ -66,7 +66,8 @@ export default defineComponent({
       },
       sortByItems: [
         { idx: 1, text: '当周' },
-        { idx: 2, text: '次周' }
+        { idx: 2, text: '次周' },
+        { idx: 3, text: '名字' }
       ]
     }
   }
