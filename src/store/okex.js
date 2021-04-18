@@ -62,6 +62,14 @@ export default {
     api: apiOpt
   },
   getters: {
+    positions({ positions }) {
+      return Object.values(positions).reduce((m, p) => {
+        const key = p.instId.split('-').slice(0, 2).join('-')
+        if (!m[key]) m[key] = []
+        m[key].push(p)
+        return m
+      }, {})
+    },
     currentTickers({ usdTickers, usdtTickers }, _, { currentInstId }) {
       const [coin, middle] = currentInstId.split('-')
       const group = (middle === 'USD' ? usdTickers : usdtTickers)[coin]
