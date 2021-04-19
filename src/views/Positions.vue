@@ -1,5 +1,5 @@
 <template>
-  <el-button style="margin-top: 10px;" @click="updateAccount">更新</el-button>
+  <el-button style="margin-top: 10px;" :loading="loading" @click="updateAccount">更新</el-button>
   <el-table
     style="margin-top: 10px;"
     :data="[...Object.values(accounts.details || {}), { ccy: '总计', disEq: accounts.totalEq }]"
@@ -88,19 +88,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState, mapGetters, mapActions } from 'vuex'
+import store from '@/store'
+import { defineComponent, ref } from 'vue'
+import { mapState, mapGetters } from 'vuex'
 
 export default defineComponent({
-  methods: {
-    ...mapActions('okex', ['updateAccount'])
-  },
   computed: {
     ...mapGetters('okex', ['positions']),
     ...mapState('okex', ['accounts'])
   },
   setup() {
-    return {};
+    const loading = ref(false)
+
+    const updateAccount = async () => {
+      loading.value = true
+      await store.dispatch('okex/updateAccount').catch(console.error)
+      loading.value = false
+    }
+
+    return { loading, updateAccount }
   }
 })
 </script>
