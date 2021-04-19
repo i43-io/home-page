@@ -1,4 +1,5 @@
 <template>
+  <el-button style="margin-top: 10px;" @click="updateAccount">更新</el-button>
   <el-table
     style="margin-top: 10px;"
     :data="[...Object.values(accounts.details || {}), { ccy: '总计', disEq: accounts.totalEq }]"
@@ -88,9 +89,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default defineComponent({
+  methods: {
+    ...mapActions('okex', ['updateAccount'])
+  },
   computed: {
     ...mapGetters('okex', ['positions']),
     ...mapState('okex', ['accounts'])
