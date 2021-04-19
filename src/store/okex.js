@@ -66,7 +66,10 @@ export default {
       return Object.values(positions).reduce((m, p) => {
         const key = p.instId.split('-').slice(0, 2).join('-')
         if (!m[key]) m[key] = []
-        m[key].push(p)
+
+        if (p.instId.indexOf('SWAP') < 0) m[key].push(p)
+        else m[key].unshift(p)
+        
         return m
       }, {})
     },
@@ -151,11 +154,12 @@ export default {
     async updateAccount({ commit, state }) {
       const coins = Object.keys(state.usdTickers).join(',') + ',USDT'
 
-      // commit('setAccounts', await httpApi.getAccounts(coins))
       commit('setPositions', _.flatten(await Promise.all([
         httpApi.getPositions('FUTURES'),
         httpApi.getPositions('SWAP')
       ])))
+
+      commit('setAccounts', await httpApi.getAccounts(coins))
     },
 
     async updateApiOpt({ dispatch }, { apiKey, apiSecret, passphrase }) {

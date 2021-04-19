@@ -1,6 +1,45 @@
 <template>
   <el-table
     style="margin-top: 10px;"
+    :data="[...Object.values(accounts.details || {}), { ccy: '总计', disEq: accounts.totalEq }]"
+  >
+    <el-table-column
+      prop="ccy"
+      label="$"
+    />
+
+    <el-table-column
+      prop="eq"
+      :formatter="(a, b, v) => v && (v * 1).toFixed(4)"
+      label="权益"
+    />
+
+    <el-table-column
+      prop="upl"
+      :formatter="(a, b, v) => v && (v * 1).toFixed(4)"
+      label="收益"
+    />
+
+    <el-table-column
+      prop="availEq"
+      :formatter="(a, b, v) => v && (v * 1).toFixed(4)"
+      label="可用"
+    />
+
+    <el-table-column
+      :formatter="row => row.availEq && (100 - row.availEq / row.eq * 100).toFixed(2) + '%'"
+      label="使用率"
+    />
+
+    <el-table-column
+      prop="disEq"
+      :formatter="(a, b, v) => v && (v * 1).toFixed(4)"
+      label="$"
+    />
+  </el-table>
+
+  <el-table
+    style="margin-top: 10px;"
     v-for="(pos, group) in positions"
     :key="group"
     :data="pos"
@@ -20,6 +59,11 @@
     <el-table-column
       prop="availPos"
       label="持仓量"
+    />
+
+    <el-table-column
+      prop="lever"
+      label="杠杆"
     />
 
     <el-table-column
