@@ -15,13 +15,13 @@
     </el-table-column> -->
     <el-table-column label="ASK">
       <template #default="scope">
-        <div :class="{ red: scope.row.askPx < data[0].bidPx, green: scope.row.askPx > data[0].bidPx }">{{scope.row.askPx}}</div>
+        <div :class="{ red: scope.row.askPx * 1 < data[0].bidPx, green: scope.row.askPx * 1 > data[0].bidPx }">{{scope.row.askPx}}</div>
         <div v-if="positions['long:' + scope.row.instId]">{{positions['long:' + scope.row.instId].availPos}}</div>
       </template>
     </el-table-column>
     <el-table-column label="BID">
       <template #default="scope">
-        <div :class="{ red: scope.row.bidPx > data[0].askPx, green: scope.row.bidPx < data[0].askPx }">{{scope.row.bidPx}}</div>
+        <div :class="{ red: scope.row.bidPx * 1 > data[0].askPx, green: scope.row.bidPx * 1 < data[0].askPx }">{{scope.row.bidPx}}</div>
         <div v-if="positions['short:' + scope.row.instId]">{{positions['short:' + scope.row.instId].availPos}}</div>
       </template>
     </el-table-column>
