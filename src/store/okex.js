@@ -147,8 +147,8 @@ export default {
 
       wsApi = new v5.WsApi()
       wsApi.on('tickers', ([ticker]) => commit('updateTicker', parseTicker(ticker)))
-      await wsApi.subscribePublic(_.flatMap(usdTickers, g => g.map(({ instId }) => ({ channel: 'tickers', instId }))))
-      await wsApi.subscribePublic(_.flatMap(usdtTickers, g => g.map(({ instId }) => ({ channel: 'tickers', instId }))))
+      await wsApi.subscribePublic(_.flatMap(usdTickers, g => g.map(({ instId }) => ({ channel: 'tickers', instId }))), true)
+      await wsApi.subscribePublic(_.flatMap(usdtTickers, g => g.map(({ instId }) => ({ channel: 'tickers', instId }))), true)
     },
 
     async updateAccount({ commit, state }) {
