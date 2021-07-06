@@ -1,4 +1,4 @@
-# home-weui
+# home-vue3
 
 ## Project setup
 ```
