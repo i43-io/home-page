@@ -14,11 +14,16 @@
 </template>
 
 <script setup>
-import { h } from 'vue'
+import { h, ref, provide } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import { NConfigProvider, NText, NLayoutHeader, NMenu, NGlobalStyle, darkTheme } from 'naive-ui'
+import { NConfigProvider, NLayoutHeader, NMenu, NGlobalStyle, darkTheme } from 'naive-ui'
 
 const route = useRoute()
+const config = ref(localStorage['i43-config'] && JSON.parse(localStorage['i43-config']) || {
+  okex: { apiKey: '', apiSecret: '', passphrase: '' },
+  saved: false 
+})
+provide('config', config)
 
 const navItems = [{
   key: '/',
