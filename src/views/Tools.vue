@@ -26,26 +26,16 @@
 </template>
 
 <script setup>
-// import hash from 'hash-util'
+import hashUtil from 'hash-util'
 import { ref, watch } from 'vue'
 import { NForm, NGrid, NFormItemGi, NSelect, NInput, NInputNumber } from 'naive-ui'
 
-const hashOptions = [{
-  label: 'MD5',
-  value: 'MD5'
-}, {
-  label: 'SHA256',
-  value: 'SHA256'
-}]
+function toOptions(arr) {
+  return arr.map(v => ({ label: v, value: v }))
+}
 
-const formatOptions = [{
-  label: 'base64',
-  value: 'base64'
-}, {
-  label: 'hex',
-  value: 'hex'
-}]
-
+const hashOptions = toOptions(['md5', 'sha256'])
+const formatOptions = toOptions(['base64', 'hex'])
 const processOptions = [{
   label: '过滤',
   value: 'filter'
@@ -57,13 +47,18 @@ const processOptions = [{
 const result = ref('')
 const formValue = ref({
   text: '',
-  hash: 'MD5',
+  hash: 'md5',
   format: 'base64',
-  process: 'filter',
+  process: 'multiround',
   length: 10
 })
 
-watch(formValue.value, ({ text, hash, format, process, length }) => {
-  result.value = JSON.stringify({ text, hash, format, process, length })
+watch(formValue.value, ({ text, hash: hash, format, process, length }) => {
+  let hashed = hashUtil[hash](text, format).substr(0, length)
+  while (!/^[0-9A-Za-z]+$/.test(hashed)) {
+    if (process === 'multiround') hashed = hashUtil[hash](hashed, format).substr(0, length)
+    else hashed = hashed.replace(/[+/=]/g, '').substr(0, length)
+  }
+  result.value = hashed
 })
 </script>
