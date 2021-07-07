@@ -23,7 +23,10 @@ const route = useRoute()
 const navItems = [{
   key: '/',
   label: '首页'
-},{
+}, {
+  key: '/tools',
+  label: '工具'
+}, {
   key: '/settings',
   label: '设置'
 }]
@@ -34,3 +37,9 @@ const renderNavItem = (option) => h(
   { default: () => option.label }
 )
 </script>
+
+<style lang="scss">
+.body-container {
+  padding: 10px 20px;
+}
+</style>
