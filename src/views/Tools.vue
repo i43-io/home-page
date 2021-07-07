@@ -50,6 +50,9 @@ const processOptions = [{
 }, {
   label: '多轮',
   value: 'multiround'
+}, {
+  label: '不处理',
+  value: 'none'
 }]
 
 const resultInput = ref(null)
@@ -64,9 +67,10 @@ const formValue = ref({
 
 watch(formValue.value, ({ text, hash: hash, format, process, length }) => {
   let hashed = hashUtil[hash](text, format).substr(0, length)
-  while (!/^[0-9A-Za-z]+$/.test(hashed)) {
+  for (let cnt = 0; !/^[0-9A-Za-z]+$/.test(hashed) && cnt < 32; cnt++) {
     if (process === 'multiround') hashed = hashUtil[hash](hashed, format).substr(0, length)
-    else hashed = hashed.replace(/[+/=]/g, '').substr(0, length)
+    else if (process === 'filter') hashed = hashed.replace(/[+/=]/g, '').substr(0, length)
+    else break;
   }
   result.value = hashed
 })
