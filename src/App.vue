@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { h, ref, provide } from 'vue'
+import { h, ref, provide, computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { NConfigProvider, NLayoutHeader, NMenu, NGlobalStyle, darkTheme } from 'naive-ui'
 
@@ -25,16 +25,20 @@ const config = ref(localStorage['i43-config'] && JSON.parse(localStorage['i43-co
 })
 provide('config', config)
 
-const navItems = [{
+const navItems = computed(() =>[{
   key: '/',
   label: '首页'
+}, {
+  key: '/positions',
+  label: '持仓',
+  required: () => config.value.saved
 }, {
   key: '/tools',
   label: '工具'
 }, {
   key: '/settings',
   label: '设置'
-}]
+}].filter(i => !i.required || i.required()))
 
 const renderNavItem = (option) => h(
   RouterLink,
