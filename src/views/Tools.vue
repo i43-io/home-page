@@ -15,7 +15,7 @@
         <n-select :options="processOptions" v-model:value="formValue.process" />
       </n-form-item-gi>
       <n-form-item-gi label="result" :span="2">
-        <n-input placeholder="result" v-model:value="result" />
+        <n-input placeholder="result" v-model:value="result" @focus="copyToClipboard" readonly ref="resultInput" />
       </n-form-item-gi>
       <n-form-item-gi label="长度">
         <n-input-number placeholder="长度" v-model:value="formValue.length" />
@@ -29,6 +29,14 @@
 import hashUtil from 'hash-util'
 import { ref, watch } from 'vue'
 import { NForm, NGrid, NFormItemGi, NSelect, NInput, NInputNumber } from 'naive-ui'
+
+function copyToClipboard() {
+  if (result.value) {
+    const input = resultInput.value.$el.querySelector('input')
+    input.select()
+    document.execCommand('copy')
+  }
+}
 
 function toOptions(arr) {
   return arr.map(v => ({ label: v, value: v }))
@@ -44,6 +52,7 @@ const processOptions = [{
   value: 'multiround'
 }]
 
+const resultInput = ref(null)
 const result = ref('')
 const formValue = ref({
   text: '',
