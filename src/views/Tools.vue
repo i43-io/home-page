@@ -61,7 +61,7 @@ const formValue = ref({
   text: '',
   hash: 'md5',
   format: 'base64',
-  process: 'multiround',
+  process: 'none',
   length: 10
 })
 
