@@ -1,6 +1,6 @@
 <template>
   <div class="body-container">
-    <n-card title="官码计算器">
+    <n-card title="密码计算器">
       <n-form inline :model="formValue">
         <n-grid :cols="3" :x-gap="12">
           <n-form-item-gi :span="3" label="text">
