@@ -1,34 +1,36 @@
 <template>
   <div class="body-container">
-    <n-form inline :model="formValue">
-      <n-grid :cols="3" :x-gap="12">
-        <n-form-item-gi :span="3" label="text">
-          <n-input placeholder="text" v-model:value="formValue.text" />
-        </n-form-item-gi>
-        <n-form-item-gi label="hash method">
-          <n-select :options="hashOptions" v-model:value="formValue.hash" />
-        </n-form-item-gi>
-        <n-form-item-gi label="format">
-          <n-select :options="formatOptions" v-model:value="formValue.format" />
-        </n-form-item-gi>
-        <n-form-item-gi label="特殊字符">
-          <n-select :options="processOptions" v-model:value="formValue.process" />
-        </n-form-item-gi>
-        <n-form-item-gi label="result" :span="2">
-          <n-input placeholder="result" v-model:value="result" @focus="copyToClipboard" readonly ref="resultInput" />
-        </n-form-item-gi>
-        <n-form-item-gi label="长度">
-          <n-input-number placeholder="长度" v-model:value="formValue.length" />
-        </n-form-item-gi>
-      </n-grid>
-    </n-form>
+    <n-card title="官码计算器">
+      <n-form inline :model="formValue">
+        <n-grid :cols="3" :x-gap="12">
+          <n-form-item-gi :span="3" label="text">
+            <n-input placeholder="text" v-model:value="formValue.text" />
+          </n-form-item-gi>
+          <n-form-item-gi label="hash method">
+            <n-select :options="hashOptions" v-model:value="formValue.hash" />
+          </n-form-item-gi>
+          <n-form-item-gi label="format">
+            <n-select :options="formatOptions" v-model:value="formValue.format" />
+          </n-form-item-gi>
+          <n-form-item-gi label="特殊字符">
+            <n-select :options="processOptions" v-model:value="formValue.process" />
+          </n-form-item-gi>
+          <n-form-item-gi label="result" :span="2">
+            <n-input placeholder="result" v-model:value="result" @focus="copyToClipboard" readonly ref="resultInput" />
+          </n-form-item-gi>
+          <n-form-item-gi label="长度">
+            <n-input-number placeholder="长度" v-model:value="formValue.length" />
+          </n-form-item-gi>
+        </n-grid>
+      </n-form>
+    </n-card>
   </div>
   </template>
   
   <script setup>
   import hashUtil from 'hash-util'
   import { ref, watch } from 'vue'
-  import { NForm, NGrid, NFormItemGi, NSelect, NInput, NInputNumber } from 'naive-ui'
+  import { NCard, NForm, NGrid, NFormItemGi, NSelect, NInput, NInputNumber } from 'naive-ui'
   
   function copyToClipboard() {
     if (result.value) {
