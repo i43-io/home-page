@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Positions from '../views/Positions.vue'
-import Tools from '../views/Tools.vue'
 import Settings from '../views/Settings.vue'
 
 const routes = [
@@ -9,11 +8,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
-  },
-  {
-    path: '/tools',
-    name: 'Tools',
-    component: Tools
   },
   {
     path: '/positions',

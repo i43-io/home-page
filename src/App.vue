@@ -27,14 +27,11 @@ provide('config', config)
 
 const navItems = computed(() =>[{
   key: '/',
-  label: '首页'
+  label: '工具'
 }, {
   key: '/positions',
   label: '持仓',
   required: () => config.value.saved
-}, {
-  key: '/tools',
-  label: '工具'
 }, {
   key: '/settings',
   label: '设置'
