@@ -13,10 +13,10 @@
     "core-js": "^3.8.3",
     "crypto-browserify": "^3.12.0",
     "hash-util": "^0.1.0",
-    "naive-ui": "^2.15.3",
+    "naive-ui": "^2.15.5",
     "okex-api": "^0.11.4",
     "stream-browserify": "^3.0.0",
-    "vue": "^3.0.4",
+    "vue": "^3.1.5",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
@@ -31,6 +31,7 @@
     "eslint-plugin-vue": "^7.2.0",
     "gh-pages": "^3.2.3",
     "sass": "^1.32.7",
-    "sass-loader": "^11.0.1"
+    "sass-loader": "^11.0.1",
+    "vue-loader": "^16.3.1"
   }
 }
