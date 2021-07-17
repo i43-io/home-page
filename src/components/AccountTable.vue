@@ -8,7 +8,7 @@ import { NDataTable } from 'naive-ui'
 import { accounts } from '@/store/okex'
 
 function getScrollX() {
-  return window.innerWidth < 720 ? 720 : ''
+  return window.innerWidth < 600 ? 600 : ''
 }
 
 function getRowClassName(row) {
