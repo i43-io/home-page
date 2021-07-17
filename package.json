@@ -14,6 +14,7 @@
     "crypto-browserify": "^3.12.0",
     "hash-util": "^0.1.0",
     "naive-ui": "^2.15.3",
+    "okex-api": "^0.11.4",
     "stream-browserify": "^3.0.0",
     "vue": "^3.0.4",
     "vue-router": "^4.0.3"

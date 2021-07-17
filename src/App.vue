@@ -18,11 +18,9 @@ import { h, ref, provide, computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { NConfigProvider, NLayoutHeader, NMenu, NGlobalStyle, darkTheme } from 'naive-ui'
 
+import config from '@/store/config'
+
 const route = useRoute()
-const config = ref(localStorage['i43-config'] && JSON.parse(localStorage['i43-config']) || {
-  okex: { apiKey: '', apiSecret: '', passphrase: '' },
-  saved: false 
-})
 provide('config', config)
 
 const navItems = computed(() =>[{
