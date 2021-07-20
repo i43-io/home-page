@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { h, ref, provide, computed } from 'vue'
+import { h, provide, computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { NConfigProvider, NLayoutHeader, NMenu, NGlobalStyle, darkTheme } from 'naive-ui'
 
@@ -25,6 +25,9 @@ provide('config', config)
 
 const navItems = computed(() =>[{
   key: '/',
+  label: '首页'
+}, {
+  key: '/tools',
   label: '工具'
 }, {
   key: '/positions',
