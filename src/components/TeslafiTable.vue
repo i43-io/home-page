@@ -1,22 +1,22 @@
 <template>
 <n-data-table
-  v-if="data && data.latestUpdates"
+  v-if="teslafi && teslafi.latestUpdates"
   :columns="columns"
-  :data="data.latestUpdates.versions"
+  :data="teslafi.latestUpdates.versions"
   :scroll-x="getScrollX()"
 />
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue'
+import { computed } from 'vue'
 import { NDataTable } from 'naive-ui'
 
-const props = defineProps({ data: Object })
+import { teslafi } from '@/store/teslafi'
 
 function getScrollX() {
   return window.innerWidth < 720 ? 720 : ''
 }
 
-const columns = computed(() => props.data && props.data.latestUpdates &&
-  props.data.latestUpdates.head.map((title, key) => ({ title, key, fixed: key === 0 ? 'left' : undefined, align: 'center' })))
+const columns = computed(() => teslafi.value && teslafi.value.latestUpdates &&
+  teslafi.value.latestUpdates.head.map((title, key) => ({ title, key, fixed: key === 0 ? 'left' : undefined, align: 'center' })))
 </script>
