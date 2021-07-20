@@ -18,5 +18,5 @@ function getScrollX() {
 }
 
 const columns = computed(() => props.data && props.data.latestUpdates &&
-  props.data.latestUpdates.head.map((title, key) => ({ title, key, fixed: key === 0, align: 'center' })))
+  props.data.latestUpdates.head.map((title, key) => ({ title, key, fixed: key === 0 ? 'left' : undefined, align: 'center' })))
 </script>
