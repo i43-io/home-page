@@ -9,12 +9,10 @@
 
 <script setup>
 import { computed, h } from 'vue'
-import { NDataTable, useThemeVars } from 'naive-ui'
+import { NDataTable } from 'naive-ui'
 
 import { teslafi } from '@/store/teslafi'
-
-const themeVars = useThemeVars()
-themeVars.value // weired
+import TeslafiVersionDetails from './TeslafiVersionDetails.vue'
 
 function getScrollX() {
   return window.innerWidth < 720 ? 720 : ''
@@ -28,22 +26,9 @@ const columns = computed(() =>
     {
       title, key, fixed: 'left', align: 'center',
       render(row) {
-        return h(
-          'A',
-          {
-            target: '_blank',
-            href: `https://www.notateslaapp.com/software-updates/version/2021.24.3/release-notes`
-          },
-          { default: () => row[0] }
-        )
+        return h(TeslafiVersionDetails, { version: row[0] })
       }
     }
   )
 )
 </script>
-
-<style scoped>
-::v-deep a {
-  color: v-bind(themeVars.primaryColor);
-}
-</style>
