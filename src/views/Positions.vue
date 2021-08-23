@@ -2,7 +2,7 @@
   <div class="body-container">
     <n-card title="资金" style="margin-bottom: 10px;">
       <template #header-extra>
-        <promise-button :action="updateAccount">刷新</promise-button>
+        <promise-button :action="updateAccount" :init="true">刷新</promise-button>
       </template>
       <account-table />
     </n-card>

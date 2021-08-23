@@ -19,5 +19,3 @@ export async function updateAccount() {
     ...await httpApi.getPositions('SWAP')
   ]
 }
-
-updateAccount()

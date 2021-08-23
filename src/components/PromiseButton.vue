@@ -8,7 +8,7 @@
 import { ref, defineProps } from 'vue'
 import { NButton } from 'naive-ui'
 
-const props = defineProps({ action: Function })
+const props = defineProps({ action: Function, init: Boolean })
 
 const loading = ref(false)
 async function onClick() {
@@ -21,4 +21,6 @@ async function onClick() {
     loading.value = false
   }
 }
+
+if (props.init) onClick()
 </script>

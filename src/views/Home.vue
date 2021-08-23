@@ -2,7 +2,7 @@
   <div class="body-container">
     <n-card title="Teslafi固件数据">
       <template #header-extra>
-        <promise-button :action="updateData">刷新</promise-button>
+        <promise-button :action="updateData" :init="true">刷新</promise-button>
       </template>
       <teslafi-table />
     </n-card>
