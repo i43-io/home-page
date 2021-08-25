@@ -65,7 +65,10 @@ function getPositionColumns({ groupId }) {
   }, {
     title: '强平价',
     key: 'liqPx',
-    align: 'right'
+    align: 'right',
+    render(row) {
+      return h('span', (row.liqPx * 1).toFixed(4))
+    }
   }]
 }
 </script>
