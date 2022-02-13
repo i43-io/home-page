@@ -15,18 +15,18 @@ import { teslafi } from '@/store/teslafi'
 import TeslafiVersionDetails from './TeslafiVersionDetails.vue'
 
 function getScrollX() {
-  return window.innerWidth < 720 ? 720 : ''
+  return window.innerWidth < 720 ? 760 : ''
 }
 
 const columns = computed(() =>
   teslafi.value && teslafi.value.latestUpdates &&
   teslafi.value.latestUpdates.head.map((title, key) =>
-    key !== 0 ?
-    { title, key, align: 'center' } :
+    key !== 1 ?
+    { title: title || '⇩', key, align: 'center' } :
     {
       title, key, fixed: 'left', align: 'center',
       render(row) {
-        return h(TeslafiVersionDetails, { version: row[0] })
+        return h(TeslafiVersionDetails, { version: row[1] })
       }
     }
   )
