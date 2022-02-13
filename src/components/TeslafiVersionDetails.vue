@@ -1,7 +1,10 @@
 <template>
 <n-popconfirm :show-icon="false">
   <template #trigger>
-    <a :style="{ color: themeVars.primaryColor }">{{version}}</a>
+    <a :style="{ color: themeVars.primaryColor }">
+      {{versionParts.version}}
+      <div v-if="versionParts.fsd">FSD{{versionParts.fsd}}</div>
+    </a>
   </template>
   <div v-if="versionDetail.length > 0">
     <table>
@@ -32,10 +35,10 @@ import { teslafi } from '@/store/teslafi'
 const props = defineProps({ version: String })
 const themeVars = useThemeVars()
 
-const url = `https://www.notateslaapp.com/software-updates/version/${props.version}/release-notes`
 const versionDetail = computed(() => {
   if (teslafi.value) {
-    const index = teslafi.value.vehicleVersion.categories.findIndex(v => v === props.version)
+    const version = props.version.trim().split(' ')[0]
+    const index = teslafi.value.vehicleVersion.categories.findIndex(v => v === version)
     if (index >= 0) {
       const ret = teslafi.value.vehicleVersion.series.map(({ name, data}) => ({ name, total: data[index] }))
       ret.push({ name: 'Total', total: ret.reduce((m, d) => m + d.total, 0) })
@@ -45,6 +48,16 @@ const versionDetail = computed(() => {
 
   return []
 })
+
+const versionParts = computed(() => {
+  const parts = props.version.trim().split(' ')
+  return {
+    version: parts[0],
+    fsd: parts[1]
+  }
+})
+
+const url = `https://www.notateslaapp.com/software-updates/version/${versionParts.value.version}/release-notes`
 </script>
 
 <style scoped>
